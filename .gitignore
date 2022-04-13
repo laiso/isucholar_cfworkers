@@ -1,3 +1,4 @@
-dist/
-node_modules/
-worker/
+dist
+node_modules
+transpiled
+/.idea/

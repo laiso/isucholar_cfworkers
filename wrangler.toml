@@ -1,11 +1,15 @@
 name = "isucholar_cfworkers"
-type = "webpack"
-route = ''
-zone_id = ''
-usage_model = ''
-compatibility_flags = []
+type = "javascript"
+zone_id = ""
+account_id = ""
+route = ""
 workers_dev = true
-compatibility_date = "2022-04-10"
+compatibility_date = "2022-04-13"
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"
 
 # [secrets]
 # APP_SECRET
