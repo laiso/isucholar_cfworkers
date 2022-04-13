@@ -2,26 +2,31 @@ import {createDatabaseErrorResponse} from "../errors";
 import {getDatabaseClient} from "../database";
 import {User} from "../types";
 import {compareSync} from "bcryptjs";
+import {createCookie} from "../session";
 
 export async function handleLoginRequest(request: Request): Promise<Response> {
   const {code, password} = await request.json();
   const db = getDatabaseClient();
 
-  const {error, data: users} = await db.from<User>('users').select('*').eq('code', code)
+  const {error, data: user} = await db.from<User>('users').select('*').eq('code', code).single()
   if (error) {
     return createDatabaseErrorResponse(error);
   }
 
-  if (!users) {
+  if (!user) {
     throw new Error('User not found');
   }
 
-  const result = compareSync(password, fromBytea(users[0].hashed_password.toString()));
+  const result = compareSync(password, fromBytea(user.hashed_password.toString()));
   if (!result) {
     throw new Error('Password is incorrect');
   }
 
-  return Response.redirect('/mypage', 302);
+  const issuedCookie = await createCookie(user);
+  const response = Response.redirect('/mypage', 302);
+  response.headers.set('Set-Cookie', issuedCookie);
+
+  return response;
 }
 
 function fromBytea(hex: string) {

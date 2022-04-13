@@ -1,5 +1,37 @@
-import {parse} from "cookie";
+import {parse, serialize} from "cookie";
 import {User} from "./types";
+
+export async function createCookie(user: User): Promise<string> {
+  const info = {
+    userID: user.id,
+    userName: user.name,
+    isAdmin: user.type === 'teacher',
+  };
+
+  const encoder = new TextEncoder();
+
+  const key = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(btoa(APP_SECRET)),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+  );
+
+  const value = btoa(JSON.stringify(info));
+  const session = encoder.encode(value);
+  const signature = await crypto.subtle.sign("HMAC", key, session);
+  const hash = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(
+      /=+$/,
+      ""
+  );
+
+  return serialize('session', value +'.' +hash, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
+}
 
 export async function getCurrentUser(request: Request): Promise<User> {
   const cookie = parse(request.headers.get('Cookie') || '');
