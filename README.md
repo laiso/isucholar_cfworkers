@@ -25,6 +25,7 @@ https://github.com/isucon/isucon11-final/tree/main/webapp/frontend
 をそのまま利用します
 
 ## データベースについて
+https://supabase.com/ のホスティング環境を利用します。
 Supabaseを利用する制約上、MySQLからPostgreSQLに置き換えています
 
 # 感謝
