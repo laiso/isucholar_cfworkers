@@ -2,19 +2,17 @@ import {handleDefaultRequest} from "./handlers/handleDefaultRequest";
 import {handleMeRequest} from "./handlers/handleMeRequest";
 import {handleLoginRequest} from "./handlers/handleLoginRequest";
 
-const URL_REGEX = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(?<path>[/\w .-]*)*\/?$/;
-
 addEventListener('fetch', (event) => {
   const method = event.request.method;
-  const path = event.request.url.match(URL_REGEX)?.pop();
+  const url = new URL(event.request.url);
 
-  const route = `${method} ${path}`;
-  switch (route) {
-    case 'POST /login':
-      event.respondWith(handleLoginRequest(event.request)); break;
-    case 'GET /api/users/me':
-      event.respondWith(handleMeRequest(event.request)); break;
-    default:
-      event.respondWith(handleDefaultRequest(event.request));
+  if (method === 'POST' && url.pathname === '/login') {
+    event.respondWith(handleLoginRequest(event.request));
+  } else if (method === 'GET' && url.pathname === '/api/users/me') {
+    event.respondWith(handleMeRequest(event.request))
+  } else if (method === 'GET' && /\/api\/courses\/\w/.test(url.pathname)) {
+    // TODO: event.respondWith(handleCourseRequest(event.request))
+  } else {
+    event.respondWith(handleDefaultRequest(event.request));
   }
 })
