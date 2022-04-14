@@ -1,39 +1,35 @@
-# ʕ •́؈•̀) `worker-typescript-template`
+# ISUCON11本選問題のアプリケーションをCloudflare WorkersとSupabaseで実装してみる
 
-A batteries included template for kick starting a TypeScript Cloudflare worker project.
+このリポジトリは実践的なウェブアプリケーションをCloudflare Workers上で動作させ、そのアーキテクチャ特性を検証するという目的で作られました。
 
-## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.17 or newer to use this template.
-
-## 🔋 Getting Started
-
-This template is meant to be used with [Wrangler](https://github.com/cloudflare/wrangler). If you are not already familiar with the tool, we recommend that you install the tool and configure it to work with your [Cloudflare account](https://dash.cloudflare.com). Documentation can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler/).
-
-To generate using Wrangler, run this command:
-
-```bash
-wrangler generate my-ts-project https://github.com/cloudflare/worker-typescript-template
+## アーキテクチャ
+```mermaid
+graph TD
+  User --> Routes[Cloudflare Routes]
+  Routes -- /* --> Site[Workers Site, Frontend, Nuxt App]
+  Routes -- /api/* --> API[Cloudflare Workers, Backend]
+  Routes -- /login --> API
+  Routes -- /logout --> API
+  API -- REST --> Supabase[supabase.io]
 ```
 
-### 👩 💻 Developing
 
-[`src/index.ts`](./src/index.ts) calls the request handler in [`src/handler.ts`](./src/handler.ts), and will return the [request method](https://developer.mozilla.org/en-US/docs/Web/API/Request/method) for the given request.
+## アプリケーションについて
+https://isucon.net/archives/56163308.html
 
-### 🧪 Testing
+## ISUCON11について
+https://isucon.net/archives/55821036.html
 
-This template comes with jest tests which simply test that the request handler can handle each request method. `npm test` will run your tests.
+## フロントエンド実装
+https://github.com/isucon/isucon11-final/tree/main/webapp/frontend
+をそのまま利用します
 
-### ✏️ Formatting
+## データベースについて
+Supabaseを利用する制約上、MySQLからPostgreSQLに置き換えています
 
-This template uses [`prettier`](https://prettier.io/) to format the project. To invoke, run `npm run format`.
+# 感謝
+https://github.com/isucon/isucon11-final/tree/main/webapp/nodejs 
+のNode.js版参考実装に沿って開発しています
 
-### 👀 Previewing and Publishing
-
-For information on how to preview and publish your worker, please see the [Wrangler docs](https://developers.cloudflare.com/workers/tooling/wrangler/commands/#publish).
-
-## 🤢 Issues
-
-If you run into issues with this specific project, please feel free to file an issue [here](https://github.com/cloudflare/worker-typescript-template/issues). If the problem is with Wrangler, please file an issue [here](https://github.com/cloudflare/wrangler/issues).
-
-## ⚠️ Caveats
-
-The `service-worker-mock` used by the tests is not a perfect representation of the Cloudflare Workers runtime. It is a general approximation. We recommend that you test end to end with `wrangler dev` in addition to a [staging environment](https://developers.cloudflare.com/workers/tooling/wrangler/configuration/environments/) to test things before deploying.
+https://github.com/remix-run/remix/ 
+から多くのプラクティスを取り入れました
