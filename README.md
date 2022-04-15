@@ -13,6 +13,24 @@ graph TD
   API -- REST --> Supabase[supabase.io]
 ```
 
+## やること
+- [x] POST /login
+- [ ] POST /logout
+- [x] GET /api/users/me
+- [ ] GET /api/users/me/courses
+- [ ] PUT /api/users/me/courses
+- [ ] GET /api/users/me/grades
+- [ ] GET /api/courses
+- [ ] POST /api/courses
+- [ ] GET /api/courses/:courseId
+- [ ] PUT /api/courses/:courseId/status
+- [ ] GET /api/courses/:courseId/classes
+- [ ] POST /api/courses/:courseId/classes
+- [ ] POST /api/courses/:courseId/classes/:classId/assignments
+- [ ] PUT /api/courses/:courseId/classes/:classId/assignments/scores
+- [ ] GET /api/courses/:courseId/classes/:classId/assignments/export
+- [ ] GET /api/announcements
+- [ ] GET /api/announcements/:announcementId
 
 ## アプリケーションについて
 https://isucon.net/archives/56163308.html
